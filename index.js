@@ -44,17 +44,25 @@ async function main() {
 
   const Ocorrencia = mongoose.model('ocorrencias', ocorrenciaSchema);
 
-  const ocorrencia = {
-    titulo: 'Assalto perto do IFPB',
-    descricao: 'Levaram meu celular',
-    tipo: 'Assalto',
-    localizacao: {
-      type:'Point',
-      coordinates: [-38.54499, -6.88832]
-    }
-  }
-  Ocorrencia.create(ocorrencia).then(retorno =>{
-    console.log(retorno);
+  // const ocorrencia = {
+  //   titulo: 'Assalto perto do IFPB',
+  //   descricao: 'Levaram meu celular',
+  //   tipo: 'Assalto',
+  //   localizacao: {
+  //     type:'Point',
+  //     coordinates: [-38.54499, -6.88832]
+  //   }
+  // }
+  // Ocorrencia.create(ocorrencia).then(retorno =>{
+  //   console.log(retorno);
+  // }).catch(error =>{
+  //   console.log(error);
+  // });
+
+  Ocorrencia.find({$text:{$search:'assalto'}},
+    {titulo:1,localizacao:1, _id:0})
+  .then(ocorrencias =>{
+    console.log(ocorrencias);
   }).catch(error =>{
     console.log(error);
   });
