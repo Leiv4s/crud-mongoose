@@ -1,6 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
+const { randomUUID } = require('crypto');
 
 main().catch(err => console.log(err));
 
@@ -36,8 +37,26 @@ async function main() {
     }
   });
 
+  ocorrenciaSchema.index(
+    {titulo: 'text', descricao:'text'},
+    {default_language: 'pt', weights:{titulo:2, descricao:1}}
+  );
+
   const Ocorrencia = mongoose.model('ocorrencias', ocorrenciaSchema);
-  
-  console.log(Ocorrencia);
+
+  const ocorrencia = {
+    titulo: 'Assalto perto do IFPB',
+    descricao: 'Levaram meu celular',
+    tipo: 'Assalto',
+    localizacao: {
+      type:'Point',
+      coordinates: [-38.54499, -6.88832]
+    }
+  }
+  Ocorrencia.create(ocorrencia).then(retorno =>{
+    console.log(retorno);
+  }).catch(error =>{
+    console.log(error);
+  });
 
 }
